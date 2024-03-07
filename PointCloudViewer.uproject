@@ -15,7 +15,10 @@
 		{
 			"Name": "CloudLoader",
 			"Type": "Runtime",
-			"LoadingPhase": "PostEngineInit"
+			"LoadingPhase": "PostEngineInit",
+			"AdditionalDependencies": [
+				"Engine"
+			]
 		},
 		{
 			"Name": "CloudEditor",
