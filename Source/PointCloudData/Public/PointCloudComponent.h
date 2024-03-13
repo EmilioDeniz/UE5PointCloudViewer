@@ -13,5 +13,5 @@ UCLASS()
 class POINTCLOUDDATA_API UPointCloudComponent : public ULidarPointCloudComponent
 {
 	GENERATED_BODY()
-	
+	private:
 };
