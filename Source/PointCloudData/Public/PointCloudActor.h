@@ -14,6 +14,6 @@ class POINTCLOUDDATA_API APointCloudActor : public ALidarPointCloudActor
 {
 	GENERATED_BODY()
 	public:
-		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties")
+		UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties", Meta = (ExposeOnSpawn = true))
 			FString DirectoryPath;
 };
