@@ -13,5 +13,16 @@ UCLASS()
 class POINTCLOUDDATA_API UPointCloudComponent : public ULidarPointCloudComponent
 {
 	GENERATED_BODY()
-	private:
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties", Meta = (ExposeOnSpawn = true))
+	TMap<FString,FLinearColor> LabeledClassificationColors;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties", Meta = (ExposeOnSpawn = true))
+	TMap<FString,int32> LabeledClassificationIndices;
+	
+	UFUNCTION(BlueprintCallable,Category="PoitCloudComponentUtils")
+	void setClassificationItem(FString OldKey,FString NewKey,FLinearColor NewColor);
+
+	UFUNCTION(BlueprintCallable,Category="PoitCloudComponentUtils")
+	void setClassificationIndices(TMap<FString,FLinearColor>StringMap);
 };
