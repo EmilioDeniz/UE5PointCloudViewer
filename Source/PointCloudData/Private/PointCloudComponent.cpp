@@ -3,39 +3,36 @@
 
 #include "PointCloudComponent.h"
 
-void UPointCloudComponent::setClassificationIndices(TMap<FString, FLinearColor> StringMap)
+TMap<FString,int32>  UPointCloudComponent::setClassificationIndices(TMap<FString, FLinearColor> StringMap)
 {
-	TMap<int32,FLinearColor> ColorsMap = ClassificationColors;
 	TMap<FString,int32> IndicesMap;
 
 	for (const auto& item : StringMap)
 	{
-		for (const auto& colorItem : ColorsMap)
+		if (!IndicesMap.Contains(item.Key))
 		{
-			if (item.Value == colorItem.Value)
-			{
-				IndicesMap.Add(item.Key, colorItem.Key);
-				break;
-			}
+			IndicesMap.Add(item.Key,FCString::Atoi(*item.Key));
 		}
 	}
 
-	LabeledClassificationIndices = IndicesMap;
+	return IndicesMap;
 }
 
-void UPointCloudComponent::setClassificationItem(FString OldKey, FString NewKey, FLinearColor NewColor)
+TMap<int32,FLinearColor> UPointCloudComponent::setClassificationItem(TMap<int32,FLinearColor>ColorsMap,TMap<FString,int32> IndexesMap, FString OldKey, FString NewKey, FLinearColor NewColor)
 {
-	TMap<int32,FLinearColor> ColorsMap = ClassificationColors;
-	TMap<FString,FLinearColor> LabeledMap = LabeledClassificationColors;
-	TMap<FString,int32> IndexesMap = LabeledClassificationIndices;
-
+	if(NewKey == "")
+	{
+		NewKey = OldKey;
+	}
+	
 	if (IndexesMap.Contains(OldKey))
 	{
 		int32 index = IndexesMap[OldKey];
 		ColorsMap[index] = NewColor;
 		IndexesMap.Remove(OldKey);
 		IndexesMap.Add(NewKey, index);
-		LabeledMap.Remove(OldKey);
-		LabeledMap.Add(NewKey, NewColor);
 	}
+
+	return ColorsMap;
 }
+

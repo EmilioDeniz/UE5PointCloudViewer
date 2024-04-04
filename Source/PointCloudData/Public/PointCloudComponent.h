@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HLSLTypeAliases.h"
+#include "HLSLTypeAliases.h"
 #include "LidarPointCloudComponent.h"
 #include "PointCloudComponent.generated.h"
 
@@ -21,8 +23,9 @@ public:
 	TMap<FString,int32> LabeledClassificationIndices;
 	
 	UFUNCTION(BlueprintCallable,Category="PoitCloudComponentUtils")
-	void setClassificationItem(FString OldKey,FString NewKey,FLinearColor NewColor);
+	TMap<int32,FLinearColor> setClassificationItem(TMap<int32,FLinearColor> ColorsMap,TMap<FString,int32> IndexesMap,FString OldKey,FString NewKey,FLinearColor NewColor);
 
 	UFUNCTION(BlueprintCallable,Category="PoitCloudComponentUtils")
-	void setClassificationIndices(TMap<FString,FLinearColor>StringMap);
+	TMap<FString,int32>  setClassificationIndices(TMap<FString,FLinearColor>StringMap);
+	
 };
