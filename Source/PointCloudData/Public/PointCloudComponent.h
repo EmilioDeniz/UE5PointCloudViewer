@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "HLSLTypeAliases.h"
 #include "HLSLTypeAliases.h"
+#include "ClassificationItem.h"
 #include "LidarPointCloudComponent.h"
 #include "PointCloudComponent.generated.h"
+
 
 /**
  * 
@@ -16,16 +18,15 @@ class POINTCLOUDDATA_API UPointCloudComponent : public ULidarPointCloudComponent
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties", Meta = (ExposeOnSpawn = true))
-	TMap<FString,FLinearColor> LabeledClassificationColors;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties", Meta = (ExposeOnSpawn = true))
-	TMap<FString,int32> LabeledClassificationIndices;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties")
+	TArray<UClassificationItem*> ClassificationItemsList;
 	
-	UFUNCTION(BlueprintCallable,Category="PoitCloudComponentUtils")
-	TMap<int32,FLinearColor> setClassificationItem(TMap<int32,FLinearColor> ColorsMap,TMap<FString,int32> IndexesMap,FString OldKey,FString NewKey,FLinearColor NewColor);
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void SetClassificationItemsList(TMap<int32,FLinearColor>ColorMap);
 
-	UFUNCTION(BlueprintCallable,Category="PoitCloudComponentUtils")
-	TMap<FString,int32>  setClassificationIndices(TMap<FString,FLinearColor>StringMap);
-	
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void ChangeClassificationColor(int32 Index, FLinearColor Color);
+
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void ChangeItemName(int32 Index, FString NewName);
 };

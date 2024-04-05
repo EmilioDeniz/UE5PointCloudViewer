@@ -3,36 +3,56 @@
 
 #include "PointCloudComponent.h"
 
-TMap<FString,int32>  UPointCloudComponent::setClassificationIndices(TMap<FString, FLinearColor> StringMap)
+void UPointCloudComponent::SetClassificationItemsList(TMap<int32, FLinearColor> ColorMap)
 {
-	TMap<FString,int32> IndicesMap;
-
-	for (const auto& item : StringMap)
+	TArray<UClassificationItem*> ItemsArray;
+	
+	for (const TPair<int32, FLinearColor>& Entry : ColorMap)
 	{
-		if (!IndicesMap.Contains(item.Key))
-		{
-			IndicesMap.Add(item.Key,FCString::Atoi(*item.Key));
-		}
-	}
-
-	return IndicesMap;
-}
-
-TMap<int32,FLinearColor> UPointCloudComponent::setClassificationItem(TMap<int32,FLinearColor>ColorsMap,TMap<FString,int32> IndexesMap, FString OldKey, FString NewKey, FLinearColor NewColor)
-{
-	if(NewKey == "")
-	{
-		NewKey = OldKey;
+	
+		FString Name = FString::FromInt(Entry.Key);
+		
+		int32 Index = Entry.Key;
+		FLinearColor OriginalColor = Entry.Value;
+		
+		FLinearColor RandomColor = FLinearColor(FMath::RandRange(0.f, 1.f), FMath::RandRange(0.f, 1.f), FMath::RandRange(0.f, 1.f));
+		
+		UClassificationItem* Item = NewObject<UClassificationItem>(this, UClassificationItem::StaticClass());
+		Item->SetLabel(Name);
+		Item->SetClassID(Index);
+		Item->SetClassColor(RandomColor);
+		
+		ItemsArray.Add(Item);
 	}
 	
-	if (IndexesMap.Contains(OldKey))
-	{
-		int32 index = IndexesMap[OldKey];
-		ColorsMap[index] = NewColor;
-		IndexesMap.Remove(OldKey);
-		IndexesMap.Add(NewKey, index);
-	}
+	ClassificationItemsList = ItemsArray;
 
-	return ColorsMap;
+	for (UClassificationItem* Item : ClassificationItemsList)
+	{
+		ChangeClassificationColor(Item->GetClassID(), Item->GetClassColor());
+	}
+	
 }
+
+void UPointCloudComponent::ChangeClassificationColor(int32 Index, FLinearColor Color)
+{
+	if (ClassificationColors.Contains(Index))
+	{
+		ClassificationColors[Index] = Color;
+	}
+}
+
+void UPointCloudComponent::ChangeItemName(int32 Index, FString NewName)
+{
+	for (UClassificationItem* Item : ClassificationItemsList)
+	{
+		if (Item->GetClassID() == Index)
+		{
+			Item->SetLabel(NewName);
+			break; 
+		}
+	}
+}
+
+
 
