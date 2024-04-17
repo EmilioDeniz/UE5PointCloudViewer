@@ -9,7 +9,7 @@ public class CloudLoader : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core",
+                "Core", "LidarPointCloudRuntime",
             }
         );
 
