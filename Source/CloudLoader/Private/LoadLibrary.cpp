@@ -52,11 +52,8 @@ FTransform ULoadLibrary::GetPointCloudTransform(ULidarPointCloud* PointCloud, FV
 		FBoxSphereBounds Bounds = PointCloud->GetBounds();
 		float MaxDimension = FMath::Max(Dimensions.X, FMath::Max(Dimensions.Y, Dimensions.Z));
 
-		FVector NewLocation = Bounds.Origin + FVector(0, 0, -MaxDimension/2);
-		FRotator NewRotation = FRotator(45, 0, 0); 
-
+		FVector NewLocation = Bounds.Origin + FVector(Dimensions.X/4, Dimensions.Y/4, -MaxDimension/10);
 		Transform.SetLocation(NewLocation);
-		Transform.SetRotation(NewRotation.Quaternion());
 	}
 
 	return Transform;
