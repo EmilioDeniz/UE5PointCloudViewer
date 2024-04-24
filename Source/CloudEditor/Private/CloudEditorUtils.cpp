@@ -39,8 +39,7 @@ void UCloudEditorUtils::AddWidgetToScrollBox(FString Key, FLinearColor Color, US
 		{
 			Button->SetColorAndOpacity(Color);
 		}
-
-		// Accede a la variable Default_Text y la establece con el nombre de la clase
+		
 		if (UEditableText* EditableText = Cast<UEditableText>(WidgetInstance->GetWidgetFromName(TEXT("Color_ID_Text"))))
 		{
 			EditableText->SetText(FText::FromString(Key));
@@ -51,7 +50,21 @@ void UCloudEditorUtils::AddWidgetToScrollBox(FString Key, FLinearColor Color, US
 	} 
 }
 
+FTransform UCloudEditorUtils::GetPawnTransform(APawn* Pawn, FVector Dimensions)
+{
+	FTransform Transform;
 
+	if (Pawn)
+	{
+		float MaxDimension = FMath::Max3(Dimensions.X, Dimensions.Y, Dimensions.Z);
+		
+		FVector NewLocation = FVector(Dimensions.X / 4, Dimensions.Y / 4, -0.8 * MaxDimension / 10);
+		
+		Transform.SetLocation(NewLocation);
+	}
+
+	return Transform;
+}
 
 
 

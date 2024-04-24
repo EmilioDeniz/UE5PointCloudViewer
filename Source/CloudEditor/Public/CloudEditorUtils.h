@@ -23,11 +23,14 @@ class CLOUDEDITOR_API UCloudEditorUtils : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 private:
 	static void AddWidgetToScrollBox(FString Key, FLinearColor Color, UScrollBox* ScrollBox, UObject* WorldContextObject, UClass* WidgetClass);
-public:
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
 	static void GenerateClassColorsPanelWithString(TMap<FString, FLinearColor> StringColorMap, UScrollBox* ScrollBox, UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
 	static void GenerateClassColorsPanelWithInt(UScrollBox* ScrollBox, UObject* WorldContextObject, TMap<int32, FLinearColor> IntColorMap);
+	
+	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
+	static FTransform GetPawnTransform(APawn* Pawn,FVector Dimensions);
 };
