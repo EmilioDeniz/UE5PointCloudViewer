@@ -18,7 +18,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+private:
+	void HandleZoomIn();
+	void HandleZoomOut();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -28,4 +30,19 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "View Pawn")
 	void SetPawnTransform(FVector Dimensions);
+
+	UPROPERTY(BlueprintReadWrite)
+	class UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom")
+	float Zoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom")
+	float MinZoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom")
+	float MaxZoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom")
+	float InterpSpeed;
 };
