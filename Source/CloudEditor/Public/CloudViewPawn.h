@@ -21,6 +21,7 @@ protected:
 private:
 	void HandleZoomIn();
 	void HandleZoomOut();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -45,4 +46,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Zoom")
 	float InterpSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "View Pawn Camera")
+	bool bRightClicked;
 };

@@ -16,6 +16,8 @@ ACloudViewPawn::ACloudViewPawn()
 	MinZoom = 0.1f;
 	MaxZoom = 3.0f;
 	InterpSpeed = 5.0f;
+
+	bRightClicked = false;
 }
 
 // Called when the game starts or when spawned
@@ -72,6 +74,3 @@ void ACloudViewPawn::HandleZoomOut()
 	float NewFOV = FMath::Lerp(CameraComponent->FieldOfView, TargetFOV, DeltaTime * InterpSpeed);
 	CameraComponent->SetFieldOfView(FMath::Clamp(NewFOV, MinZoom, MaxZoom));
 }
-
-
-
