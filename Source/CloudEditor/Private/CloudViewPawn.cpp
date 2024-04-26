@@ -2,6 +2,8 @@
 
 
 #include "CloudViewPawn.h"
+
+#include "CommonRenderResources.h"
 #include "Camera/CameraComponent.h"
 #include "InputCoreTypes.h"
 
@@ -18,6 +20,7 @@ ACloudViewPawn::ACloudViewPawn()
 	InterpSpeed = 5.0f;
 
 	bRightClicked = false;
+	bLeftClicked = false;
 }
 
 // Called when the game starts or when spawned
@@ -53,7 +56,6 @@ void ACloudViewPawn::SetPawnTransform(FVector Dimensions)
 		SetActorLocationAndRotation(NewLocation, NewRotation);
 	}
 }
-
 
 void ACloudViewPawn::HandleZoomIn()
 {

@@ -31,7 +31,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "View Pawn")
 	void SetPawnTransform(FVector Dimensions);
-
+	
 	UPROPERTY(BlueprintReadWrite)
 	class UCameraComponent* CameraComponent;
 
@@ -49,4 +49,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "View Pawn Camera")
 	bool bRightClicked;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "View Pawn Camera")
+	bool bLeftClicked;
 };
