@@ -52,4 +52,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "View Pawn Camera")
 	bool bLeftClicked;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "View Pawn Camera")
+	bool bCanRotate;
 };
