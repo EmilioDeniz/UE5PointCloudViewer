@@ -33,4 +33,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
 	static FTransform GetPawnTransform(APawn* Pawn,FVector Dimensions);
+
+	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
+	static FVector CalculateCorrectHitPoint(const FTransform& ActorTransform, const FVector& HitPoint);
 };

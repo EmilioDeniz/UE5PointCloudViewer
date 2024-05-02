@@ -66,6 +66,20 @@ FTransform UCloudEditorUtils::GetPawnTransform(APawn* Pawn, FVector Dimensions)
 	return Transform;
 }
 
+FVector UCloudEditorUtils::CalculateCorrectHitPoint(const FTransform& ActorTransform, const FVector& HitPoint)
+{
+	
+	FQuat ActorRotation = ActorTransform.GetRotation();
+
+	FVector Direction = (HitPoint - ActorTransform.GetLocation()).GetSafeNormal();
+	
+	FVector RotatedDirection = ActorRotation.Inverse().RotateVector(Direction);
+	
+	FVector CorrectHitPoint = ActorTransform.GetLocation() + RotatedDirection * (HitPoint - ActorTransform.GetLocation()).Size();
+
+	return CorrectHitPoint;
+}
+
 
 
 
