@@ -33,7 +33,8 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"LidarPointCloudRuntime"
+				"LidarPointCloudRuntime",
+				"Engine"
 			]
 		}
 	],
