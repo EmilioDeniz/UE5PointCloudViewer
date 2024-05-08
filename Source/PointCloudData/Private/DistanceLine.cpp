@@ -28,6 +28,7 @@ void ADistanceLine::BeginPlay()
 	if (AActor* ParentActor = GetOwner())
 	{
 		InitialRelativePosition = GetActorLocation() - ParentActor->GetActorLocation();
+		InitialRelativeRotation = GetActorRotation() - ParentActor->GetActorRotation();
 	}
 }
 
@@ -36,13 +37,14 @@ void ADistanceLine::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	/*if (Actors.Num() > 0)
+	if (AActor* ParentActor = GetOwner())
 	{
-		AActor* Actor0 = Actors[0];
-		FRotator Actor0Rotation = Actor0->GetActorRotation();
-		
-		SetActorRotation(Actor0Rotation);
-	}*/
+		FVector NewPosition = ParentActor->GetActorLocation() + ParentActor->GetActorRotation().RotateVector(InitialRelativePosition);
+		SetActorLocation(NewPosition);
+
+		FRotator NewRotation = ParentActor->GetActorRotation() + InitialRelativeRotation;
+		SetActorRotation(NewRotation);
+	}
 }
 
 void ADistanceLine::SetLineLocationAndRotation(UStaticMeshComponent* Line)

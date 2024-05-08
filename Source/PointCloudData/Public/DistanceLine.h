@@ -36,6 +36,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* LineMeshComponent;
 	FVector InitialRelativePosition;
+	FRotator InitialRelativeRotation;
 
 	UFUNCTION(BlueprintCallable,Category= "Distance Line")
 	void SetLineLocationAndRotation(UStaticMeshComponent* Line);
