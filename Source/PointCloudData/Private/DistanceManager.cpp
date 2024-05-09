@@ -31,6 +31,18 @@ int UDistanceManager::GetNumberOfActors()
 	return DistanceItems.Num();
 }
 
+TArray<AActor*> UDistanceManager::GetActorsFromList()
+{
+	TArray<AActor*> Actors;
+	
+	for(DistanceItem* Item: DistanceItems)
+	{
+		Actors.Add(Item->getActor());
+	}
+	return Actors;
+}
+
+
 TArray<FActorDistanceTuple> UDistanceManager::CalculateDistances()
 {
 	TArray<FActorDistanceTuple> Result;

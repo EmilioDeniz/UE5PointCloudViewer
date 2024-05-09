@@ -37,6 +37,9 @@ public:
 	void ResetList();
 	
 	UFUNCTION(BlueprintCallable, Category = "Distance Manager") 
+	TArray<AActor*> GetActorsFromList();
+	
+	UFUNCTION(BlueprintCallable, Category = "Distance Manager") 
 	int GetNumberOfActors();
 
 	UFUNCTION(BlueprintCallable, Category = "Distance Manager")
