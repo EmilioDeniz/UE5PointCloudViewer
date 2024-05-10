@@ -29,4 +29,7 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void ChangeItemName(int32 Index, FString NewName);
+	
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	FVector3f GetPointAtLocation(FVector Center);
 };

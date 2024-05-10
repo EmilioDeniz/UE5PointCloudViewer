@@ -54,5 +54,18 @@ void UPointCloudComponent::ChangeItemName(int32 Index, FString NewName)
 	}
 }
 
-
+FVector3f UPointCloudComponent::GetPointAtLocation(FVector Center)
+{
+	FVector Extent = {80,80,80};
+	TArray<FLidarPointCloudPoint> Points = this->GetPointsInBoxAsCopies(Center,Extent,false,true);
+	if(Points.Num()>0)
+	{
+		return Points[0].Location;
+	}else
+	{
+		 FVector3f Empty;
+		 return Empty;
+	}
+	
+}
 
