@@ -32,4 +32,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	FVector3f GetPointAtLocation(FVector Center);
+
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void RotateAroundAxis(const FVector Axis, const FRotator Rotation);
 };

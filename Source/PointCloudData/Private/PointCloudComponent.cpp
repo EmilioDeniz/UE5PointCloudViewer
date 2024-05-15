@@ -3,6 +3,8 @@
 
 #include "PointCloudComponent.h"
 
+#include "PointCloudActor.h"
+
 void UPointCloudComponent::SetClassificationItemsList(TMap<int32, FLinearColor> ColorMap)
 {
 	TArray<UClassificationItem*> ItemsArray;
@@ -66,6 +68,20 @@ FVector3f UPointCloudComponent::GetPointAtLocation(FVector Center)
 		 FVector3f Empty;
 		 return Empty;
 	}
-	
 }
 
+void UPointCloudComponent::RotateAroundAxis(const FVector Axis, const FRotator Rotation)
+{
+	
+	AActor* Parent = this -> GetOwner();
+	if(Parent)
+	{
+		FTransform ParentTransform = Parent->GetActorTransform();
+		
+		FTransform AxisTransform = FTransform(ParentTransform.GetRotation(), Axis);
+		FTransform DeltaPivotToOriginal = ParentTransform * AxisTransform.Inverse();
+		FTransform DesiredTransform = FTransform(Rotation, FVector(0,0,0)) * DeltaPivotToOriginal * FTransform(Rotation, FVector(0,0,0)) * AxisTransform;
+
+		Parent->SetActorRelativeTransform(DesiredTransform);
+	}
+}

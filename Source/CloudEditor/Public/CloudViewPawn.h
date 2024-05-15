@@ -21,7 +21,7 @@ protected:
 private:
 	void HandleZoomIn();
 	void HandleZoomOut();
-
+	FVector RotationAxis;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
