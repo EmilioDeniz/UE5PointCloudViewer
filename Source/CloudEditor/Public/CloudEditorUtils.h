@@ -8,6 +8,7 @@
 #include "Components/ScrollBox.h"
 #include "Components/Button.h"
 #include "Components/EditableText.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "CloudEditorUtils.generated.h"
 
@@ -36,4 +37,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
 	static FVector CalculateCorrectHitPoint(const FTransform& ActorTransform, const FVector& HitPoint);
+
+	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Widget Utils")
+	static AActor* GetOwningActor(UUserWidget* UserWidget);
 };

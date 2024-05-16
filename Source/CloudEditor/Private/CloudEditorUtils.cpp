@@ -3,6 +3,10 @@
 
 #include "CloudEditorUtils.h"
 
+#include "EngineUtils.h"
+#include "Components/WidgetComponent.h"
+#include "GameFramework/Pawn.h"
+
 void UCloudEditorUtils::GenerateClassColorsPanelWithString(TMap<FString, FLinearColor> StringColorMap, UScrollBox* ScrollBox, UObject* WorldContextObject)
 {
 	static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/ClassificationColorWidgetBlueprint.ClassificationColorWidgetBlueprint'"));
@@ -81,5 +85,34 @@ FVector UCloudEditorUtils::CalculateCorrectHitPoint(const FTransform& ActorTrans
 
 
 
+AActor* UCloudEditorUtils::GetOwningActor(UUserWidget* UserWidget)
+{
+	if (!UserWidget)
+	{
+		return nullptr;
+	}
+	
+	UWorld* World = UserWidget->GetWorld();
+	if (!World)
+	{
+		return nullptr;
+	}
 
+	for (TActorIterator<AActor> ActorItr(World); ActorItr; ++ActorItr)
+	{
+		AActor* Actor = *ActorItr;
 
+		TArray<UWidgetComponent*> WidgetComponents;
+		Actor->GetComponents(WidgetComponents);
+
+		for (UWidgetComponent* WidgetComponent : WidgetComponents)
+		{
+			if (WidgetComponent->GetUserWidgetObject() == UserWidget)
+			{
+				return Actor;
+			}
+		}
+	}
+
+	return nullptr;
+}
