@@ -31,7 +31,7 @@ public:
 	~UDistanceManager();
 	
 	UFUNCTION(BlueprintCallable, Category = "Distance Manager") 
-	void AddActor(AActor* Actor,FVector CorrectLocation);
+	void AddActor(AActor* Actor,FVector CorrectLocation,FVector PointLocation);
 
 	UFUNCTION(BlueprintCallable, Category = "Distance Manager") 
 	void ResetList();

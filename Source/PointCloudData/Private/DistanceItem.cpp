@@ -7,8 +7,8 @@ DistanceItem::DistanceItem()
 {
 }
 
-DistanceItem::DistanceItem(AActor* Target, int64 TargetID, FVector Location)
-	: Actor(Target), ID(TargetID), CorrectLocation(Location)
+DistanceItem::DistanceItem(AActor* Target, int64 TargetID, FVector Location,FVector ReferencePoint)
+	: Actor(Target), ID(TargetID), CorrectLocation(Location), ReferenceLocation(ReferencePoint)
 {
 }
 
@@ -26,6 +26,12 @@ FVector DistanceItem::getLocation()
 {
 	return CorrectLocation;
 }
+
+FVector DistanceItem::getReferenceLocation()
+{
+	return ReferenceLocation;
+}
+
 
 DistanceItem::~DistanceItem()
 {

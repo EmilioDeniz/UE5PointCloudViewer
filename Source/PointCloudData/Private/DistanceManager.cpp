@@ -13,10 +13,10 @@ UDistanceManager::~UDistanceManager()
 {
 }
 
-void UDistanceManager::AddActor(AActor* Actor,FVector CorrectLocation)
+void UDistanceManager::AddActor(AActor* Actor,FVector CorrectLocation,FVector PointLocation)
 {
 	ElementID ++;
-	DistanceItem* Item = new DistanceItem(Actor,ElementID,CorrectLocation);
+	DistanceItem* Item = new DistanceItem(Actor,ElementID,CorrectLocation,PointLocation);
 	DistanceItems.Add(Item);
 }
 
@@ -55,8 +55,8 @@ TArray<FActorDistanceTuple> UDistanceManager::CalculateDistances()
 			Tuple.ID1 = DistanceItems[i]->getID();
 			Tuple.ID2 = DistanceItems[j]->getID();
 
-			FVector Location1 = DistanceItems[i]->getLocation();
-			FVector Location2 = DistanceItems[j]->getLocation();
+			FVector Location1 = DistanceItems[i]->getReferenceLocation();
+			FVector Location2 = DistanceItems[j]->getReferenceLocation();
 			
 			FVector DistanceVector = Location2 - Location1;
 
