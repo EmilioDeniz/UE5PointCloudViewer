@@ -12,6 +12,7 @@ public:
 	AActor* getActor();
 	int64 getID();
 	FVector getLocation();
+	void setLocation(FVector NewLocation);
 	FVector getReferenceLocation();
 	~DistanceItem();
 private:

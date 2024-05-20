@@ -54,6 +54,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Distance Manager")
 	TArray<FVector> GetCorrectLocationsFromTuple(const FActorDistanceTuple& Tuple);
 
+	UFUNCTION(BlueprintCallable, Category = "Distance Manager")
+	void UpdateCorrectLocationOfActor(AActor* Actor, FTransform Transform);
+
 private:
 	int ElementID;
 	TArray<DistanceItem*> DistanceItems;

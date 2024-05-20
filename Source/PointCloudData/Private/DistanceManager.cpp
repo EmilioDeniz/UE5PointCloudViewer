@@ -122,3 +122,14 @@ TArray<FVector> UDistanceManager::GetLocationsFromIDs(int64 ID1, int64 ID2)
 	}
 	return Result;
 }
+
+void UDistanceManager::UpdateCorrectLocationOfActor(AActor* Actor, FTransform Transform)
+{
+	for (DistanceItem* Item : DistanceItems)
+	{
+		if(Item->getActor() == Actor)
+		{
+			Item->setLocation(Transform.GetLocation());
+		}
+	}
+}

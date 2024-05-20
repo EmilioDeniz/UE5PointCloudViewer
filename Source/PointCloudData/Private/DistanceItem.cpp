@@ -27,6 +27,11 @@ FVector DistanceItem::getLocation()
 	return CorrectLocation;
 }
 
+void DistanceItem::setLocation(FVector NewLocation)
+{
+	CorrectLocation = NewLocation;
+}
+
 FVector DistanceItem::getReferenceLocation()
 {
 	return ReferenceLocation;
