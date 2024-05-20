@@ -28,7 +28,7 @@ void ADistanceLine::BeginPlay()
 	if (AActor* ParentActor = GetOwner())
 	{
 		InitialRelativePosition = GetActorLocation() - ParentActor->GetActorLocation();
-		InitialRelativeRotation = GetActorRotation() - ParentActor->GetActorRotation();
+		InitialRelativePosition = GetActorLocation() - ParentActor->GetActorLocation();
 	}
 }
 
@@ -55,21 +55,19 @@ void ADistanceLine::SetLineLocationAndRotation(UStaticMeshComponent* Line)
 		{
 			FVector Actor1Location = CorrectLocations[0];
 			FVector Actor2Location = CorrectLocations[1];
-        		
+
 			FVector MiddlePoint = (Actor1Location + Actor2Location) / 2;
-        		
-			const float VerticalOffset = 50.0f; 
+
+			const float VerticalOffset = 50.0f;
 			MiddlePoint.Z += VerticalOffset;
-        		
-			this->SetActorLocation(MiddlePoint);
-        		
+
+			SetActorLocation(MiddlePoint);
+
 			FVector Direction = Actor2Location - Actor1Location;
 			FRotator Rotation = Direction.Rotation();
 			Rotation.Pitch += 90.0f;
-			
-			FRotator WorldRotation = Parent->GetTransform().TransformRotation(Rotation.Quaternion()).Rotator();
 
-			Line->SetWorldRotation(WorldRotation);
+			Line->SetWorldRotation(Rotation);
 		}
 	}
 }
@@ -78,7 +76,7 @@ void ADistanceLine::SetLineLength(UStaticMeshComponent* Line)
 {
 	if (Actors.Num() == 2) 
 	{
-		float ScaleZ = Distance.Size()/100.f; 
+		float ScaleZ = FVector::Dist(CorrectLocations[0], CorrectLocations[1]) / 100.0f; 
 		
 		Line->SetWorldScale3D(FVector(0.5, 0.5, ScaleZ)); 
 	}
