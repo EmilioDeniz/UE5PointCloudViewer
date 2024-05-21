@@ -2,8 +2,7 @@
 
 
 #include "PointCloudComponent.h"
-
-#include "PointCloudActor.h"
+#include "LidarPointCloud.h"
 
 void UPointCloudComponent::SetClassificationItemsList(TMap<int32, FLinearColor> ColorMap)
 {
@@ -84,4 +83,79 @@ void UPointCloudComponent::RotateAroundAxis(const FVector Axis, const FRotator R
 
 		Parent->SetActorRelativeTransform(DesiredTransform);
 	}
+}
+
+TArray<FClassifiedPoint> UPointCloudComponent::FilterPointsByID(int32 ClassID)
+{
+    TArray<FClassifiedPoint> FilteredPoints;
+    ULidarPointCloud* Cloud = GetPointCloud();
+    if (Cloud)
+    {
+        FTransform PointCloudTransform = GetComponentTransform();
+
+        TArray<FLidarPointCloudPoint> PointsArray;
+        Cloud->GetPointsAsCopies(PointsArray, true, 0, -1);
+        
+        for (FLidarPointCloudPoint Point : PointsArray)
+        {
+            if (Point.ClassificationID == ClassID)
+            {
+                FClassifiedPoint FilteredPoint;
+                FilteredPoint.Location = FVector(Point.Location);
+                FilteredPoint.ClassificationID = Point.ClassificationID;
+                FilteredPoints.Add(FilteredPoint);
+            }
+        }
+    }
+
+    return FilteredPoints;
+}
+
+TArray<FVector> UPointCloudComponent::ScanConflictingTrees()
+{
+    TArray<FVector> TreePoints;
+    
+    const TArray<int32> CableClasses = {17, 18, 20, 13};
+	
+    for(int32 Class : CableClasses)
+    {
+        TArray<FClassifiedPoint> Points = FilterPointsByID(Class);
+
+        for(FClassifiedPoint Point : Points)
+        {
+            FVector TreePoint = ScanTrees(Point);
+            if (!TreePoint.IsZero())
+            {
+                TreePoints.Add(TreePoint);
+            }
+        }
+    }
+    return TreePoints;
+}
+
+FVector UPointCloudComponent::ScanTrees(const FClassifiedPoint& Point)
+{
+    if (!Point.Location.IsZero())
+    {
+        TArray<FLidarPointCloudPoint> Points = GetNearbyPoints(Point.Location, 100.0f);
+        for (FLidarPointCloudPoint NearbyPoint : Points)
+        {
+            if (NearbyPoint.ClassificationID == 23|| NearbyPoint.ClassificationID == 3)
+            {
+                return FVector(NearbyPoint.Location);
+            }
+        }
+    }
+    return FVector::ZeroVector;
+}
+
+TArray<FLidarPointCloudPoint> UPointCloudComponent::GetNearbyPoints(FVector Center, float SearchRadius)
+{
+    if (this && GetPointCloud())
+    {
+        ULidarPointCloud* Cloud = GetPointCloud();
+        TArray<FLidarPointCloudPoint> NearbyPoints = Cloud->GetPointsInSphereAsCopies(Center, SearchRadius, false, true);
+        return NearbyPoints;
+    }
+    return {};
 }
