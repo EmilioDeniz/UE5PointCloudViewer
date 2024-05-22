@@ -18,30 +18,6 @@
  */
 DECLARE_DYNAMIC_DELEGATE_OneParam(FPointCloudFilterCallback, const TArray<FVector>&, FilteredPoints);
 
-USTRUCT(BlueprintType)
-struct FClassifiedPoint
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadWrite, Category = "Point Cloud")
-	FLidarPointCloudPoint Point;
-	
-	UPROPERTY(BlueprintReadWrite, Category = "Point Cloud")
-	FVector Location;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Point Cloud")
-	int32 ClassificationID;
-};
-
-USTRUCT(BlueprintType)
-struct FPowerLine
-{
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadWrite)
-	TArray<FClassifiedPoint> Points;
-};
-
 UCLASS()
 class POINTCLOUDDATA_API UPointCloudComponent : public ULidarPointCloudComponent
 {
@@ -64,13 +40,21 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void RotateAroundAxis(const FVector Axis, const FRotator Rotation);
-
-	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
-	TArray<FClassifiedPoint> FilterPointsByID(int32 ClassID);
 	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
-	TArray<FVector> ScanConflictingTrees();
+	void SetPointList();
+	
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void SetScanClasses();
+	
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	TArray<FVector3f> ScanConflictingTrees();
 private:
-	FVector ScanTrees(const FClassifiedPoint& Point);
-	TArray<FLidarPointCloudPoint> GetNearbyPoints(FVector Center, float SearchRadius);
+	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
+	TArray<FVector3f> ScanTrees(FLidarPointCloudPoint* Point);
+	TArray<FLidarPointCloudPoint*> GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius);
+
+	TArray<FLidarPointCloudPoint*> PointCloudPoints;
+	TArray<uint8> CableClasses;
+	TArray<uint8> TreeClasses;
 };
