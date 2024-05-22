@@ -156,7 +156,7 @@ TArray<FVector3f> UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
 
 	if (!Point->Location.IsZero())
 	{
-		TArray<FLidarPointCloudPoint*> Points = GetNearbyPoints(Point, 1000.0f);
+		TArray<FLidarPointCloudPoint*> Points = GetNearbyPoints(Point, 950.0f);
 		
 		for (FLidarPointCloudPoint* NearbyPoint : Points)
 		{
