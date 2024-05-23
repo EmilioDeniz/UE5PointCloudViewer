@@ -147,6 +147,7 @@ TArray<FVector3f> UPointCloudComponent::ScanConflictingTrees()
 			}
 		}
 	}
+	GetPointCloud()->RefreshRendering();
 	return TreePoints;
 }
 
@@ -157,17 +158,20 @@ TArray<FVector3f> UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
 	if (!Point->Location.IsZero())
 	{
 		TArray<FLidarPointCloudPoint*> Points = GetNearbyPoints(Point, 950.0f);
-		
+        
 		for (FLidarPointCloudPoint* NearbyPoint : Points)
 		{
-			if (TreeClasses.Contains(uint8(NearbyPoint->ClassificationID)))
+			if (TreeClasses.Contains(uint8(NearbyPoint->ClassificationID)) && !ScannedPoints.Contains(NearbyPoint))
 			{
+				SaveOriginalColor(NearbyPoint, NearbyPoint->Color);
+
 				NearbyPoint->Color = FColor::Red;
+				
 				Trees.Add(NearbyPoint->Location);
+				ScannedPoints.Add(NearbyPoint);
 			}
 		}
 	}
-	GetPointCloud()->RefreshRendering();
 	return Trees;
 }
 
@@ -182,4 +186,28 @@ TArray<FLidarPointCloudPoint*> UPointCloudComponent::GetNearbyPoints(FLidarPoint
     	
 	Cloud->GetPointsInSphere(NearbyPoints, SearchSphere,false);
 	return NearbyPoints;
+}
+
+void UPointCloudComponent::SaveOriginalColor(FLidarPointCloudPoint* Point, FColor Color)
+{
+	FPointColorTuple NewTuple;
+	NewTuple.Point = Point;
+	NewTuple.Color = Color;
+	OriginalPointColors.Add(NewTuple);
+}
+
+void UPointCloudComponent::ResetPaintedPoints()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Resetting painted points"));
+	if (!OriginalPointColors.IsEmpty())
+	{
+		for (FPointColorTuple Tuple : OriginalPointColors)
+		{
+				
+			Tuple.Point->Color = Tuple.Color;
+		}
+
+		OriginalPointColors.Empty();
+		GetPointCloud()->RefreshRendering();
+	}
 }

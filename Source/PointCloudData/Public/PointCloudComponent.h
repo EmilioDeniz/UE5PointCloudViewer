@@ -18,6 +18,15 @@
  */
 DECLARE_DYNAMIC_DELEGATE_OneParam(FPointCloudFilterCallback, const TArray<FVector>&, FilteredPoints);
 
+USTRUCT()
+struct FPointColorTuple
+{
+	GENERATED_BODY()
+	
+	FLidarPointCloudPoint * Point;
+	FColor Color;
+};
+
 UCLASS()
 class POINTCLOUDDATA_API UPointCloudComponent : public ULidarPointCloudComponent
 {
@@ -49,12 +58,19 @@ public:
 	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	TArray<FVector3f> ScanConflictingTrees();
+
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	void ResetPaintedPoints();
+
 private:
 	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
 	TArray<FVector3f> ScanTrees(FLidarPointCloudPoint* Point);
 	TArray<FLidarPointCloudPoint*> GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius);
+	void SaveOriginalColor(FLidarPointCloudPoint*Point, FColor Color);
 
 	TArray<FLidarPointCloudPoint*> PointCloudPoints;
 	TArray<uint8> CableClasses;
 	TArray<uint8> TreeClasses;
+	TArray<FPointColorTuple> OriginalPointColors;
+	TArray<FLidarPointCloudPoint*> ScannedPoints;
 };
