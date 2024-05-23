@@ -139,22 +139,21 @@ TArray<FVector3f> UPointCloudComponent::ScanConflictingTrees()
 
 		for (FLidarPointCloudPoint* Point : Points)
 		{
-			TArray<FVector3f> ScannedTrees = ScanTrees(Point);
-
-			for (FVector3f TreePoint : ScannedTrees)
-			{
-				TreePoints.Add(TreePoint);
-			}
+			ScanTrees(Point);
 		}
 	}
+
+	for(FLidarPointCloudPoint* Point: ScannedPoints)
+	{
+		TreePoints.Add(Point->Location);
+	}
+	
 	GetPointCloud()->RefreshRendering();
 	return TreePoints;
 }
 
-TArray<FVector3f> UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
+void UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
 {
-	TArray<FVector3f> Trees;
-
 	if (!Point->Location.IsZero())
 	{
 		TArray<FLidarPointCloudPoint*> Points = GetNearbyPoints(Point, 950.0f);
@@ -167,14 +166,11 @@ TArray<FVector3f> UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
 
 				NearbyPoint->Color = FColor::Red;
 				
-				Trees.Add(NearbyPoint->Location);
 				ScannedPoints.Add(NearbyPoint);
 			}
 		}
 	}
-	return Trees;
 }
-
 
 TArray<FLidarPointCloudPoint*> UPointCloudComponent::GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius)
 {

@@ -64,7 +64,7 @@ public:
 
 private:
 	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
-	TArray<FVector3f> ScanTrees(FLidarPointCloudPoint* Point);
+	void ScanTrees(FLidarPointCloudPoint* Point);
 	TArray<FLidarPointCloudPoint*> GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius);
 	void SaveOriginalColor(FLidarPointCloudPoint*Point, FColor Color);
 
