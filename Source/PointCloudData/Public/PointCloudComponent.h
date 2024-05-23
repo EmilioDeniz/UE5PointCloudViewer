@@ -57,6 +57,9 @@ public:
 	void SetScanClasses();
 	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void SetSearchRadius(float Radius);
+
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	TArray<FVector3f> ScanConflictingTrees();
 
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
@@ -73,4 +76,5 @@ private:
 	TArray<uint8> TreeClasses;
 	TArray<FPointColorTuple> OriginalPointColors;
 	TArray<FLidarPointCloudPoint*> ScannedPoints;
+	float SearchRadius;
 };

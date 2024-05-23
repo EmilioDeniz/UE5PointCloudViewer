@@ -31,6 +31,11 @@ void UPointCloudComponent::SetScanClasses()
 	}
 }
 
+void UPointCloudComponent::SetSearchRadius(float Radius)
+{
+	SearchRadius = Radius;
+}
+
 void UPointCloudComponent::SetClassificationItemsList(TMap<int32, FLinearColor> ColorMap)
 {
 	TArray<UClassificationItem*> ItemsArray;
@@ -149,6 +154,7 @@ TArray<FVector3f> UPointCloudComponent::ScanConflictingTrees()
 	}
 	
 	GetPointCloud()->RefreshRendering();
+	ScannedPoints.Empty();
 	return TreePoints;
 }
 
@@ -156,7 +162,7 @@ void UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
 {
 	if (!Point->Location.IsZero())
 	{
-		TArray<FLidarPointCloudPoint*> Points = GetNearbyPoints(Point, 950.0f);
+		TArray<FLidarPointCloudPoint*> Points = GetNearbyPoints(Point, SearchRadius);
         
 		for (FLidarPointCloudPoint* NearbyPoint : Points)
 		{
@@ -172,13 +178,13 @@ void UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
 	}
 }
 
-TArray<FLidarPointCloudPoint*> UPointCloudComponent::GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius)
+TArray<FLidarPointCloudPoint*> UPointCloudComponent::GetNearbyPoints(FLidarPointCloudPoint* Center, float Radius)
 {
    
 	ULidarPointCloud* Cloud = GetPointCloud();
 	TArray<FLidarPointCloudPoint*> NearbyPoints;
 	FVector CenterPoint = FVector(Center->Location);
-	const FSphere SearchSphere(CenterPoint, SearchRadius);
+	const FSphere SearchSphere(CenterPoint, Radius);
     	
 	Cloud->GetPointsInSphere(NearbyPoints, SearchSphere,false);
 	return NearbyPoints;
@@ -194,7 +200,6 @@ void UPointCloudComponent::SaveOriginalColor(FLidarPointCloudPoint* Point, FColo
 
 void UPointCloudComponent::ResetPaintedPoints()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Resetting painted points"));
 	if (!OriginalPointColors.IsEmpty())
 	{
 		for (FPointColorTuple Tuple : OriginalPointColors)
