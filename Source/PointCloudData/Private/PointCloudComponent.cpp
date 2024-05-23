@@ -134,7 +134,7 @@ TArray<FLidarPointCloudPoint*> UPointCloudComponent::FilterPointsByID(int32 Clas
     return FilteredPoints;
 }
 
-TArray<FVector3f> UPointCloudComponent::ScanConflictingTrees()
+TArray<FVector3f> UPointCloudComponent::ScanConflictingTrees(bool bReturnCoordinates)
 {
 	TArray<FVector3f> TreePoints;
 
@@ -147,12 +147,13 @@ TArray<FVector3f> UPointCloudComponent::ScanConflictingTrees()
 			ScanTrees(Point);
 		}
 	}
-
-	for(FLidarPointCloudPoint* Point: ScannedPoints)
+	if(bReturnCoordinates)
 	{
-		TreePoints.Add(Point->Location);
+		for(FLidarPointCloudPoint* Point: ScannedPoints)
+		{
+			TreePoints.Add(Point->Location);
+		}
 	}
-	
 	GetPointCloud()->RefreshRendering();
 	ScannedPoints.Empty();
 	return TreePoints;

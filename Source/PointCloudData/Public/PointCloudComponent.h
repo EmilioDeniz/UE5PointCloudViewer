@@ -60,7 +60,7 @@ public:
 	void SetSearchRadius(float Radius);
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
-	TArray<FVector3f> ScanConflictingTrees();
+	TArray<FVector3f> ScanConflictingTrees(bool bReturnCoordinates);
 
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	void ResetPaintedPoints();
