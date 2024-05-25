@@ -3,6 +3,8 @@
 
 #include "PointCloudComponent.h"
 #include "LidarPointCloud.h"
+#include "SelectCubeActor.h"
+#include "Components/BoxComponent.h"
 
 void UPointCloudComponent::SetPointList()
 {
@@ -94,11 +96,9 @@ FVector3f UPointCloudComponent::GetPointAtLocation(FVector Center)
 	if(Points.Num()>0)
 	{
 		return Points[0].Location;
-	}else
-	{
-		 FVector3f Empty;
-		 return Empty;
 	}
+	FVector3f Empty;
+	return Empty;
 }
 
 void UPointCloudComponent::RotateAroundAxis(const FVector Axis, const FRotator Rotation)
@@ -213,3 +213,26 @@ void UPointCloudComponent::ResetPaintedPoints()
 		GetPointCloud()->RefreshRendering();
 	}
 }
+
+void UPointCloudComponent::SelectPoints(ASelectCubeActor* Cube, UStaticMeshComponent* CubeComponent)
+{
+	if (!Cube || !CubeComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Actor or CubeComponent is null."));
+		return;
+	}
+	
+	FTransform ActorTransform = Cube->GetActorTransform();
+	
+	FVector ComponentScale = CubeComponent->GetComponentScale();
+	FRotator ComponentRotation = CubeComponent->GetComponentRotation();
+	FVector ComponentLocation = CubeComponent->GetComponentLocation();
+
+	FVector BoxExtent = CubeComponent->GetStaticMesh()->GetBounds().BoxExtent * ComponentScale;
+
+	FVector BoxCenter = ComponentLocation;
+
+	DrawDebugBox(GetWorld(), BoxCenter, BoxExtent, ComponentRotation.Quaternion(), FColor::Green, true, 5.0f, 0, 10.0f);
+}
+
+

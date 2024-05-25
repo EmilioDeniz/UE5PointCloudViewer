@@ -19,7 +19,8 @@ public class PointCloudData : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "Slate",
-                "SlateCore"
+                "SlateCore",
+                "CloudEditor"
             }
         );
     }

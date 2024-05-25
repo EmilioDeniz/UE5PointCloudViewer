@@ -10,6 +10,8 @@
 #include "LidarPointCloud.h"
 #include "Math/UnrealMathUtility.h"
 #include "LidarPointCloudComponent.h"
+#include "SelectCubeActor.h"
+#include "Components/BoxComponent.h"
 #include "PointCloudComponent.generated.h"
 
 
@@ -46,7 +48,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	FVector3f GetPointAtLocation(FVector Center);
-
+	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void RotateAroundAxis(const FVector Axis, const FRotator Rotation);
 	
@@ -65,16 +67,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	void ResetPaintedPoints();
 
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	void SelectPoints(ASelectCubeActor* Cube, UStaticMeshComponent* CubeComponent);
+
 private:
 	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
 	void ScanTrees(FLidarPointCloudPoint* Point);
 	TArray<FLidarPointCloudPoint*> GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius);
 	void SaveOriginalColor(FLidarPointCloudPoint*Point, FColor Color);
-
+	
+	
 	TArray<FLidarPointCloudPoint*> PointCloudPoints;
 	TArray<uint8> CableClasses;
 	TArray<uint8> TreeClasses;
 	TArray<FPointColorTuple> OriginalPointColors;
 	TArray<FLidarPointCloudPoint*> ScannedPoints;
+	TArray<FLidarPointCloudPoint*> SelectedPoints;
 	float SearchRadius;
 };
