@@ -17,7 +17,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Selection",meta=(ExposeOnSpawn))
 	TArray<FVector> Vertices;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

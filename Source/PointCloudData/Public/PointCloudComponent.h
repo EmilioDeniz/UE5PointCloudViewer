@@ -9,9 +9,8 @@
 #include "Templates/Function.h"
 #include "LidarPointCloud.h"
 #include "Math/UnrealMathUtility.h"
-#include "LidarPointCloudComponent.h"
 #include "SelectCubeActor.h"
-#include "Components/BoxComponent.h"
+#include "LidarPointCloudComponent.h"
 #include "PointCloudComponent.generated.h"
 
 
@@ -68,14 +67,19 @@ public:
 	void ResetPaintedPoints();
 
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
-	void SelectPoints(ASelectCubeActor* Cube, UStaticMeshComponent* CubeComponent);
+	void SelectPoints(FVector Center, FBox StartingBox);
+
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	FBox GetStartingBox(ASelectCubeActor* Cube);
+	
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	FVector GetCenter(ASelectCubeActor* Cube);
 
 private:
 	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
 	void ScanTrees(FLidarPointCloudPoint* Point);
 	TArray<FLidarPointCloudPoint*> GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius);
 	void SaveOriginalColor(FLidarPointCloudPoint*Point, FColor Color);
-	
 	
 	TArray<FLidarPointCloudPoint*> PointCloudPoints;
 	TArray<uint8> CableClasses;

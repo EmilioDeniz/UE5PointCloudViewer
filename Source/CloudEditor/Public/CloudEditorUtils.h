@@ -27,12 +27,6 @@ private:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
-	static void GenerateClassColorsPanelWithString(TMap<FString, FLinearColor> StringColorMap, UScrollBox* ScrollBox, UObject* WorldContextObject);
-
-	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
-	static void GenerateClassColorsPanelWithInt(UScrollBox* ScrollBox, UObject* WorldContextObject, TMap<int32, FLinearColor> IntColorMap);
-	
-	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")
 	static FTransform GetPawnTransform(APawn* Pawn,FVector Dimensions);
 
 	UFUNCTION(BlueprintCallable, Category = "Cloud Editor Utils")

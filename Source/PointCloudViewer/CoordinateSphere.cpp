@@ -37,7 +37,6 @@ void ACoordinateSphere::Tick(float DeltaTime)
 	if (AActor* ParentActor = GetOwner())
 	{
 		FRotator ParentRotation = ParentActor->GetActorRotation();
-		
 		FVector NewPosition = ParentRotation.RotateVector(InitialRelativePosition);
 		SetActorLocation(ParentActor->GetActorLocation() + NewPosition);
 	}

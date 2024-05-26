@@ -214,25 +214,38 @@ void UPointCloudComponent::ResetPaintedPoints()
 	}
 }
 
-void UPointCloudComponent::SelectPoints(ASelectCubeActor* Cube, UStaticMeshComponent* CubeComponent)
+void UPointCloudComponent::SelectPoints(FVector Center, FBox StartingBox)
 {
-	if (!Cube || !CubeComponent)
+	FVector SelectCenter = Center;
+	FVector BoxExtent = StartingBox.GetExtent();
+	
+	FVector BoxMin = SelectCenter - BoxExtent;
+	FVector BoxMax = SelectCenter + BoxExtent;
+
+	FVector CorrectedBoxMin = FVector(FMath::Min(BoxMin.X, BoxMax.X), FMath::Min(BoxMin.Y, BoxMax.Y), FMath::Min(BoxMin.Z, BoxMax.Z));
+	FVector CorrectedBoxMax = FVector(FMath::Max(BoxMin.X, BoxMax.X), FMath::Max(BoxMin.Y, BoxMax.Y), FMath::Max(BoxMin.Z, BoxMax.Z));
+	
+	StartingBox.Min = CorrectedBoxMin;
+	StartingBox.Max = CorrectedBoxMax;
+	
+	TArray<FLidarPointCloudPoint*> PointsInBox;
+	GetPointsInBox(PointsInBox,StartingBox,false);
+	
+	for (FLidarPointCloudPoint* Point : PointsInBox)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Actor or CubeComponent is null."));
-		return;
+		Point->Color = FColor::Orange;	
 	}
-	
-	FTransform ActorTransform = Cube->GetActorTransform();
-	
-	FVector ComponentScale = CubeComponent->GetComponentScale();
-	FRotator ComponentRotation = CubeComponent->GetComponentRotation();
-	FVector ComponentLocation = CubeComponent->GetComponentLocation();
-
-	FVector BoxExtent = CubeComponent->GetStaticMesh()->GetBounds().BoxExtent * ComponentScale;
-
-	FVector BoxCenter = ComponentLocation;
-
-	DrawDebugBox(GetWorld(), BoxCenter, BoxExtent, ComponentRotation.Quaternion(), FColor::Green, true, 5.0f, 0, 10.0f);
+	GetPointCloud()->RefreshRendering();
 }
 
+FBox UPointCloudComponent::GetStartingBox(ASelectCubeActor* Cube)
+{
+	return Cube->CalculateComponentsBoundingBoxInLocalSpace();
+}
 
+FVector UPointCloudComponent::GetCenter(ASelectCubeActor* Cube)
+{
+	FVector RelativePosition = Cube->GetActorLocation() - GetOwner()->GetActorLocation();
+	FVector Center = GetOwner()->GetActorLocation() + GetOwner()->GetActorRotation().RotateVector(RelativePosition);
+	return Center;
+}
