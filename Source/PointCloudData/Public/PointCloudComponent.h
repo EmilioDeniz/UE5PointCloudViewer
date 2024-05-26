@@ -33,8 +33,14 @@ class POINTCLOUDDATA_API UPointCloudComponent : public ULidarPointCloudComponent
 {
 	GENERATED_BODY()
 public:
+	
+	void ResetPaintedPoint(FLidarPointCloudPoint* Point);
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties")
 	TArray<UClassificationItem*> ClassificationItemsList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Custom Properties")
+	bool bPointsSelected = false;
 	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void SetClassificationItemsList(TMap<int32,FLinearColor>ColorMap);
@@ -65,9 +71,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	void ResetPaintedPoints();
-
+	
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	void SelectPoints(FVector Center, FBox StartingBox);
+	
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	void DeselectPoints(FVector Center, FBox StartingBox);
 
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	FBox GetStartingBox(ASelectCubeActor* Cube);

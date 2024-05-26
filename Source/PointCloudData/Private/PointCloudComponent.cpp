@@ -205,12 +205,34 @@ void UPointCloudComponent::ResetPaintedPoints()
 	{
 		for (FPointColorTuple Tuple : OriginalPointColors)
 		{
-				
 			Tuple.Point->Color = Tuple.Color;
 		}
 
 		OriginalPointColors.Empty();
 		GetPointCloud()->RefreshRendering();
+	}
+}
+
+void UPointCloudComponent::ResetPaintedPoint(FLidarPointCloudPoint* Point)
+{
+	if (!OriginalPointColors.IsEmpty())
+	{
+		int32 IndexToRemove = INDEX_NONE;
+		
+		for (int32 Index = 0; Index < OriginalPointColors.Num(); ++Index)
+		{
+			if (OriginalPointColors[Index].Point == Point)
+			{
+				OriginalPointColors[Index].Point->Color = OriginalPointColors[Index].Color;
+				IndexToRemove = Index;
+				break;
+			}
+		}
+		
+		if (IndexToRemove != INDEX_NONE)
+		{
+			OriginalPointColors.RemoveAt(IndexToRemove);
+		}
 	}
 }
 
@@ -233,9 +255,45 @@ void UPointCloudComponent::SelectPoints(FVector Center, FBox StartingBox)
 	
 	for (FLidarPointCloudPoint* Point : PointsInBox)
 	{
-		Point->Color = SelectionColor;	
+		SaveOriginalColor(Point,Point->Color);
+		Point->Color = SelectionColor;
+		SelectedPoints.Add(Point);
 	}
 	GetPointCloud()->RefreshRendering();
+	bPointsSelected = !SelectedPoints.IsEmpty();
+}
+
+void UPointCloudComponent::DeselectPoints(FVector Center, FBox StartingBox)
+{
+	if(bPointsSelected)
+	{
+		FVector SelectCenter = Center;
+		FVector BoxExtent = StartingBox.GetExtent();
+        	
+		FVector BoxMin = SelectCenter - BoxExtent;
+		FVector BoxMax = SelectCenter + BoxExtent;
+        
+		FVector CorrectedBoxMin = FVector(FMath::Min(BoxMin.X, BoxMax.X), FMath::Min(BoxMin.Y, BoxMax.Y), FMath::Min(BoxMin.Z, BoxMax.Z));
+		FVector CorrectedBoxMax = FVector(FMath::Max(BoxMin.X, BoxMax.X), FMath::Max(BoxMin.Y, BoxMax.Y), FMath::Max(BoxMin.Z, BoxMax.Z));
+        	
+		StartingBox.Min = CorrectedBoxMin;
+		StartingBox.Max = CorrectedBoxMax;
+        	
+		TArray<FLidarPointCloudPoint*> PointsInBox;
+		GetPointsInBox(PointsInBox,StartingBox,false);
+        	
+		for (FLidarPointCloudPoint* Point : PointsInBox)
+		{
+			if(SelectedPoints.Contains(Point))
+			{
+				ResetPaintedPoint(Point);
+				SelectedPoints.Remove(Point);
+			}
+		}
+		GetPointCloud()->RefreshRendering();
+		bPointsSelected = !SelectedPoints.IsEmpty();
+	}
+	
 }
 
 FBox UPointCloudComponent::GetStartingBox(ASelectCubeActor* Cube)
