@@ -75,6 +75,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	FVector GetCenter(ASelectCubeActor* Cube);
 
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	void SetSelectionColor(FLinearColor Color);
+	
+	UFUNCTION(BlueprintPure, Category="PointCloudComponentUtils")
+	FLinearColor GetSelectionColor();
+
 private:
 	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
 	void ScanTrees(FLidarPointCloudPoint* Point);
@@ -87,5 +93,6 @@ private:
 	TArray<FPointColorTuple> OriginalPointColors;
 	TArray<FLidarPointCloudPoint*> ScannedPoints;
 	TArray<FLidarPointCloudPoint*> SelectedPoints;
+	FColor SelectionColor = FColor::Orange;
 	float SearchRadius;
 };

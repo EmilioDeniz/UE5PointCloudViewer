@@ -233,7 +233,7 @@ void UPointCloudComponent::SelectPoints(FVector Center, FBox StartingBox)
 	
 	for (FLidarPointCloudPoint* Point : PointsInBox)
 	{
-		Point->Color = FColor::Orange;	
+		Point->Color = SelectionColor;	
 	}
 	GetPointCloud()->RefreshRendering();
 }
@@ -248,4 +248,14 @@ FVector UPointCloudComponent::GetCenter(ASelectCubeActor* Cube)
 	FVector RelativePosition = Cube->GetActorLocation() - GetOwner()->GetActorLocation();
 	FVector Center = GetOwner()->GetActorLocation() + GetOwner()->GetActorRotation().RotateVector(RelativePosition);
 	return Center;
+}
+
+void UPointCloudComponent::SetSelectionColor(FLinearColor Color)
+{
+	SelectionColor = Color.ToFColor(true);
+}
+
+FLinearColor UPointCloudComponent::GetSelectionColor()
+{
+	return FLinearColor(SelectionColor);
 }
