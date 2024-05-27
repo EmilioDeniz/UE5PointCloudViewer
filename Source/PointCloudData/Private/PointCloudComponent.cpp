@@ -96,6 +96,26 @@ void UPointCloudComponent::AddClassificationItemToList(FString Label,int32 Class
 		ChangeClassificationColor(Item->GetClassID(), Item->GetClassColor());
 	}
 }
+void UPointCloudComponent::RemoveItemFromList(int32 ClassID, bool CustomAddedOnly)
+{
+	if(CustomAddedOnly)
+	{
+		TArray<uint8> ImportedClasses = GetPointCloud()->GetClassificationsImported();
+		if(ImportedClasses.Contains(uint8(ClassID)))
+		{
+			return;
+		}
+	}
+	for (UClassificationItem* Item : ClassificationItemsList)
+	{
+		if (Item->GetClassID() == ClassID)
+		{
+			ClassificationItemsList.Remove(Item);
+			ChangeClassificationColor(ClassID,FLinearColor::Yellow);
+			break;
+		}
+	}
+}
 
 void UPointCloudComponent::ChangeClassificationColor(int32 Index, FLinearColor Color)
 {

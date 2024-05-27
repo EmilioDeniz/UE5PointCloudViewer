@@ -49,6 +49,9 @@ public:
 	void AddClassificationItemToList(FString Label, int32 ClassID);
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void RemoveItemFromList(int32 ClassID, bool CustomAddedOnly);
+
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void ChangeClassificationColor(int32 Index, FLinearColor Color);
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
