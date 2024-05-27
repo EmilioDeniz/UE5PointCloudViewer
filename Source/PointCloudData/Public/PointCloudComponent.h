@@ -88,6 +88,15 @@ public:
 	void DeselectAllPoints();
 
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	void ChangeSelectedPointsClass(int32 ClassID);
+	
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	UClassificationItem* GetClassificationItem(int32 ClassID);
+	
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	UClassificationItem* GetClassificationItemByName(FString Label);
+
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	FBox GetStartingBox(ASelectCubeActor* Cube);
 	
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
@@ -110,6 +119,7 @@ private:
 	void ScanTrees(FLidarPointCloudPoint* Point);
 	TArray<FLidarPointCloudPoint*> GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius);
 	void SaveOriginalColor(FLidarPointCloudPoint*Point, FColor Color);
+	void UpdateDeletedClassPoints(int32 DeletedClass);
 	
 	TArray<FLidarPointCloudPoint*> PointCloudPoints;
 	TArray<uint8> CableClasses;

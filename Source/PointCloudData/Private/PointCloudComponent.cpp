@@ -68,34 +68,37 @@ void UPointCloudComponent::SetClassificationItemsList(TMap<int32, FLinearColor> 
 	}
 }
 
-void UPointCloudComponent::AddClassificationItemToList(FString Label,int32 ClassID)
+void UPointCloudComponent::AddClassificationItemToList(FString Label, int32 ClassID)
 {
 	UClassificationItem* Item = NewObject<UClassificationItem>(this, UClassificationItem::StaticClass());
 	FLinearColor RandomColor = FLinearColor(FMath::RandRange(0.f, 1.f), FMath::RandRange(0.f, 1.f), FMath::RandRange(0.f, 1.f));
 	bool bContainsElement = false;
-	
-	for(UClassificationItem* ClassItem: ClassificationItemsList)
+    
+	for (UClassificationItem* ClassItem : ClassificationItemsList)
 	{
-		if(ClassItem->GetClassID() == ClassID)
+		if (ClassItem->GetClassID() == ClassID)
 		{
 			bContainsElement = true;
 			break;
 		}
 	}
-	if(!bContainsElement)
+
+	if (!bContainsElement)
 	{
-		if (Label == "")
+		if (Label.IsEmpty())
 		{
 			Label = FString::FromInt(ClassID);
 		}
 		Item->SetLabel(Label);
 		Item->SetClassID(ClassID);
 		Item->SetClassColor(RandomColor);
-        	
+		
 		ClassificationItemsList.Add(Item);
+		ClassificationColors.Add(ClassID, RandomColor);
 		ChangeClassificationColor(Item->GetClassID(), Item->GetClassColor());
 	}
 }
+
 void UPointCloudComponent::RemoveItemFromList(int32 ClassID, bool CustomAddedOnly)
 {
 	if(CustomAddedOnly)
@@ -111,7 +114,8 @@ void UPointCloudComponent::RemoveItemFromList(int32 ClassID, bool CustomAddedOnl
 		if (Item->GetClassID() == ClassID)
 		{
 			ClassificationItemsList.Remove(Item);
-			ChangeClassificationColor(ClassID,FLinearColor::Yellow);
+			ChangeClassificationColor(ClassID,FLinearColor::White);
+			UpdateDeletedClassPoints(ClassID);
 			break;
 		}
 	}
@@ -341,7 +345,6 @@ void UPointCloudComponent::DeselectPoints(FVector Center, FBox StartingBox)
 		GetPointCloud()->RefreshRendering();
 		bPointsSelected = !SelectedPoints.IsEmpty();
 	}
-	
 }
 
 void UPointCloudComponent::DeselectAllPoints()
@@ -352,6 +355,62 @@ void UPointCloudComponent::DeselectAllPoints()
 		SelectedPoints.Empty();
 		bPointsSelected = !SelectedPoints.IsEmpty();
 	}
+}
+
+void UPointCloudComponent::ChangeSelectedPointsClass(int32 ClassID)
+{
+	if (bPointsSelected)
+	{
+		for (FLidarPointCloudPoint* Point : SelectedPoints)
+		{
+			Point->ClassificationID = uint8(ClassID);
+		}
+	}
+}
+
+void UPointCloudComponent::UpdateDeletedClassPoints(int32 DeletedClassID)
+{
+	SetPointList();
+	TArray<FLidarPointCloudPoint*> FilteredPoints = FilterPointsByID(DeletedClassID);
+
+	for(FLidarPointCloudPoint* Point: FilteredPoints)
+	{
+		Point->ClassificationID = 1;
+	}
+
+	if(ClassificationColors.Contains(DeletedClassID))
+	{
+		ClassificationColors.Remove(DeletedClassID);
+	}
+
+	if(!ClassificationColors.Contains(1))
+	{
+		ClassificationColors.Add(1);
+	}
+}
+
+UClassificationItem* UPointCloudComponent::GetClassificationItem(int32 ClassID)
+{
+	for(UClassificationItem* Item: ClassificationItemsList)
+	{
+		if(Item->GetClassID() == ClassID)
+		{
+			return Item;
+		}
+	}
+	return nullptr;
+}
+
+UClassificationItem* UPointCloudComponent::GetClassificationItemByName(FString Label)
+{
+	for(UClassificationItem* Item: ClassificationItemsList)
+	{
+		if(Item->GetLabel() == Label)
+		{
+			return Item;
+		}
+	}
+	return nullptr;
 }
 
 FBox UPointCloudComponent::GetStartingBox(ASelectCubeActor* Cube)
