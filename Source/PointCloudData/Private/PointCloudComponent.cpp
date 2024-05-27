@@ -200,7 +200,7 @@ TArray<FVector3f> UPointCloudComponent::ScanConflictingTrees(bool bReturnCoordin
 		}
 	}
 	if(bReturnCoordinates)
-	{
+{
 		for(FLidarPointCloudPoint* Point: ScannedPoints)
 		{
 			TreePoints.Add(Point->Location);
