@@ -66,7 +66,35 @@ void UPointCloudComponent::SetClassificationItemsList(TMap<int32, FLinearColor> 
 	{
 		ChangeClassificationColor(Item->GetClassID(), Item->GetClassColor());
 	}
+}
+
+void UPointCloudComponent::AddClassificationItemToList(FString Label,int32 ClassID)
+{
+	UClassificationItem* Item = NewObject<UClassificationItem>(this, UClassificationItem::StaticClass());
+	FLinearColor RandomColor = FLinearColor(FMath::RandRange(0.f, 1.f), FMath::RandRange(0.f, 1.f), FMath::RandRange(0.f, 1.f));
+	bool bContainsElement = false;
 	
+	for(UClassificationItem* ClassItem: ClassificationItemsList)
+	{
+		if(ClassItem->GetClassID() == ClassID)
+		{
+			bContainsElement = true;
+			break;
+		}
+	}
+	if(!bContainsElement)
+	{
+		if (Label == "")
+		{
+			Label = FString::FromInt(ClassID);
+		}
+		Item->SetLabel(Label);
+		Item->SetClassID(ClassID);
+		Item->SetClassColor(RandomColor);
+        	
+		ClassificationItemsList.Add(Item);
+		ChangeClassificationColor(Item->GetClassID(), Item->GetClassColor());
+	}
 }
 
 void UPointCloudComponent::ChangeClassificationColor(int32 Index, FLinearColor Color)

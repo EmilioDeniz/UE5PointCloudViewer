@@ -46,6 +46,9 @@ public:
 	void SetClassificationItemsList(TMap<int32,FLinearColor>ColorMap);
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void AddClassificationItemToList(FString Label, int32 ClassID);
+
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void ChangeClassificationColor(int32 Index, FLinearColor Color);
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
