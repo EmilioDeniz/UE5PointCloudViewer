@@ -444,3 +444,13 @@ FLinearColor UPointCloudComponent::GetProblemsColor()
 {
 	return FLinearColor(ProblemsColor);
 }
+
+TArray<UClassificationItem*> UPointCloudComponent::GetClassificationItemsList()
+{
+	return ClassificationItemsList;
+}
+
+bool UPointCloudComponent::GetBPointsSelected()
+{
+	return bPointsSelected;
+}

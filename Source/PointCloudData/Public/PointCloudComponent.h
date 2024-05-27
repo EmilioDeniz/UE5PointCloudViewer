@@ -36,12 +36,6 @@ public:
 	
 	void ResetPaintedPoint(FLidarPointCloudPoint* Point);
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Custom Properties")
-	TArray<UClassificationItem*> ClassificationItemsList;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Custom Properties")
-	bool bPointsSelected = false;
-	
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void SetClassificationItemsList(TMap<int32,FLinearColor>ColorMap);
 
@@ -114,12 +108,21 @@ public:
 	UFUNCTION(BlueprintPure, Category="PointCloudComponentUtils")
 	FLinearColor GetProblemsColor();
 
+	UFUNCTION(BlueprintPure, Category="PointCloudComponentUtils")
+	TArray<UClassificationItem*> GetClassificationItemsList();
+
+	UFUNCTION(BlueprintPure, Category="PointCloudComponentUtils")
+	bool GetBPointsSelected();
+
 private:
 	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
 	void ScanTrees(FLidarPointCloudPoint* Point);
 	TArray<FLidarPointCloudPoint*> GetNearbyPoints(FLidarPointCloudPoint* Center, float SearchRadius);
 	void SaveOriginalColor(FLidarPointCloudPoint*Point, FColor Color);
 	void UpdateDeletedClassPoints(int32 DeletedClass);
+
+	TArray<UClassificationItem*> ClassificationItemsList;
+	bool bPointsSelected = false;
 	
 	TArray<FLidarPointCloudPoint*> PointCloudPoints;
 	TArray<uint8> CableClasses;
