@@ -77,6 +77,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	void DeselectPoints(FVector Center, FBox StartingBox);
+	
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	void DeselectAllPoints();
 
 	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
 	FBox GetStartingBox(ASelectCubeActor* Cube);
@@ -89,6 +92,12 @@ public:
 	
 	UFUNCTION(BlueprintPure, Category="PointCloudComponentUtils")
 	FLinearColor GetSelectionColor();
+
+	UFUNCTION(BlueprintCallable, Category="PointCloudComponentUtils")
+	void SetProblemsColor(FLinearColor Color);
+	
+	UFUNCTION(BlueprintPure, Category="PointCloudComponentUtils")
+	FLinearColor GetProblemsColor();
 
 private:
 	TArray<FLidarPointCloudPoint*> FilterPointsByID(int32 ClassID);
@@ -103,5 +112,6 @@ private:
 	TArray<FLidarPointCloudPoint*> ScannedPoints;
 	TArray<FLidarPointCloudPoint*> SelectedPoints;
 	FColor SelectionColor = FColor::Orange;
+	FColor ProblemsColor = FColor::Red;
 	float SearchRadius;
 };

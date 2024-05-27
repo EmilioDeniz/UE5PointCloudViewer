@@ -171,7 +171,7 @@ void UPointCloudComponent::ScanTrees(FLidarPointCloudPoint* Point)
 			{
 				SaveOriginalColor(NearbyPoint, NearbyPoint->Color);
 
-				NearbyPoint->Color = FColor::Red;
+				NearbyPoint->Color = ProblemsColor;
 				
 				ScannedPoints.Add(NearbyPoint);
 			}
@@ -296,6 +296,16 @@ void UPointCloudComponent::DeselectPoints(FVector Center, FBox StartingBox)
 	
 }
 
+void UPointCloudComponent::DeselectAllPoints()
+{
+	if(bPointsSelected)
+	{
+		ResetPaintedPoints();
+		SelectedPoints.Empty();
+		bPointsSelected = !SelectedPoints.IsEmpty();
+	}
+}
+
 FBox UPointCloudComponent::GetStartingBox(ASelectCubeActor* Cube)
 {
 	return Cube->CalculateComponentsBoundingBoxInLocalSpace();
@@ -316,4 +326,14 @@ void UPointCloudComponent::SetSelectionColor(FLinearColor Color)
 FLinearColor UPointCloudComponent::GetSelectionColor()
 {
 	return FLinearColor(SelectionColor);
+}
+
+void UPointCloudComponent::SetProblemsColor(FLinearColor Color)
+{
+	ProblemsColor = Color.ToFColor(true);
+}
+
+FLinearColor UPointCloudComponent::GetProblemsColor()
+{
+	return FLinearColor(ProblemsColor);
 }
