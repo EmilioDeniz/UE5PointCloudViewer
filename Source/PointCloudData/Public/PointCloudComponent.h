@@ -47,6 +47,9 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void ChangeClassificationColor(int32 Index, FLinearColor Color);
+	
+	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
+	void ChangeClassificationItemColor(int32 Index, FLinearColor Color);
 
 	UFUNCTION(BlueprintCallable,Category="PointCloudComponentUtils")
 	void ChangeItemName(int32 Index, FString NewName);

@@ -5,6 +5,7 @@
 #include "LidarPointCloud.h"
 #include "SelectCubeActor.h"
 #include "Components/BoxComponent.h"
+#include "Math/UnitConversion.h"
 
 void UPointCloudComponent::SetPointList()
 {
@@ -126,6 +127,18 @@ void UPointCloudComponent::ChangeClassificationColor(int32 Index, FLinearColor C
 	if (ClassificationColors.Contains(Index))
 	{
 		ClassificationColors[Index] = Color;
+	}
+}
+
+void UPointCloudComponent::ChangeClassificationItemColor(int32 Index, FLinearColor Color)
+{
+	for(UClassificationItem* Item: ClassificationItemsList)
+	{
+		if(Item->GetClassID() == Index)
+		{
+			Item->SetClassColor(Color);
+			ChangeClassificationColor(Index,Color);
+		}
 	}
 }
 
